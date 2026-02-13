@@ -35,20 +35,35 @@ body {
 
 /* Background Glow Animation */
 body.active {
-  animation: bgGlow 6s infinite alternate;
+
+  filter: blur(0.3px) brightness(1.1);
+
+  background: linear-gradient(270deg, 
+    #ff4d6d, 
+    #ff758f, 
+    #ff8fab, 
+    #ffb3c6, 
+    #ffc2d1
+  );
+  background-size: 1000% 1000%;
+  animation: pinkFlow 12s ease infinite;
 }
 
-@keyframes bgGlow {
-  0% { background: linear-gradient(135deg, #1a001f, #330033); }
-  100% { background: linear-gradient(135deg, #ff4d6d, #ff99cc); }
+@keyframes pinkFlow {
+  0% { background-position: 0% 50%; }
+  25% { background-position: 50% 50%; }
+  50% { background-position: 100% 50%; }
+  75% { background-position: 50% 50%; }
+  100% { background-position: 0% 50%; }
 }
+
 
 /* Main Title */
 h1 {
   font-family: 'Great Vibes', cursive;
-  font-size: 4rem;
+  font-size: 6rem;
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 100px;
   opacity: 0;
   transform: translateY(-20px);
   transition: 1.5s;
@@ -57,6 +72,7 @@ h1 {
 body.active h1 {
   opacity: 1;
   transform: translateY(0);
+  
 }
 
 /* Button */
@@ -65,6 +81,7 @@ button {
   font-size: 1.2rem;
   border: none;
   border-radius: 50px;
+  margin-bottom: 110px;
   background: var(--pink);
   color: white;
   cursor: pointer;
@@ -77,13 +94,23 @@ button:hover {
   box-shadow: 0 0 40px rgba(255, 77, 109, 1);
 }
 
-/* Floating Hearts */
-.heart {
-  position: absolute;
-  font-size: 20px;
-  animation: floatUp 5s linear infinite;
-  opacity: 0;
+.penguin {
+  position: fixed;
+  top: 100vh;
+  animation: floatPenguin linear forwards;
+  pointer-events: none;
+  z-index: 9999;
 }
+
+@keyframes floatPenguin {
+  0% {
+    transform: translateY(0) rotate(0deg);
+  }
+  100% {
+    transform: translateY(-120vh) rotate(360deg);
+  }
+}
+
 
 body.active .heart {
   opacity: 1;
@@ -149,35 +176,58 @@ body.active .love-letter {
 
 <body>
 
-<h1>Happy Valentine's Day 💖</h1>
+<h1>Happy Valentine's Day Abigail 💖</h1>
 
-<button onclick="activateLove()">Click for a Surprise 💌</button>
+<button onclick="activateLove()">Press for Noot 💌</button>
+
+<audio id="loveSong" src="Bershy - Radio (Lyrics) Dispatch Song.mp3" loop></audio>
 
 <div class="love-letter">
-  <h2>My Love</h2>
-  <p>You make my world brighter, warmer, and filled with love. 💕</p>
+  <h2>I Love you, Abigail</h2>
+  <p>Stay Alien, you're perfect just that way you are... for real you're actually perect.. enjoy da song :p 💕</p>
 </div>
 
 <script>
+let isPlaying = false;
+
 function activateLove() {
   document.body.classList.add("active");
 
-  createHearts();
+  createPenguins();
   createRoses();
   createSparkles();
-}
 
-/* Create Floating Hearts */
-function createHearts() {
-  for (let i = 0; i < 30; i++) {
-    let heart = document.createElement("div");
-    heart.className = "heart";
-    heart.innerHTML = "💖";
-    heart.style.left = Math.random() * 100 + "vw";
-    heart.style.animationDuration = (3 + Math.random() * 3) + "s";
-    document.body.appendChild(heart);
+  const song = document.getElementById("loveSong");
+
+  if (!isPlaying) {
+    song.volume = 0.2;
+    song.play();
+    isPlaying = true;
   }
 }
+
+
+/* Create Floating Penguins */
+function createPenguins() {
+  setInterval(() => {
+    let penguin = document.createElement("div");
+    penguin.className = "penguin";
+    penguin.innerHTML = "🐧";
+
+    penguin.style.left = Math.random() * 100 + "vw";
+    penguin.style.fontSize = (20 + Math.random() * 30) + "px";
+    penguin.style.animationDuration = (4 + Math.random() * 4) + "s";
+
+    document.body.appendChild(penguin);
+
+    // Remove after animation to prevent lag
+    setTimeout(() => {
+      penguin.remove();
+    }, 8000);
+
+  }, 300);
+}
+
 
 /* Create Falling Roses */
 function createRoses() {
